@@ -1,0 +1,6 @@
+*.pyc
+__pycache__
+files/
+parser.out
+PDFtoJSON
+python-dieroller/
