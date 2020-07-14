@@ -25,8 +25,8 @@ def loadFromJSON(name):
 
         for key, value in json["skill"].items():
             if "Total" in value:
-                characters[name][key] = value["Total"]
-                print(key, characters[name][key])
+                characters[name][key.lower()] = value["Total"]
+                print(key, characters[name][key.lower()])
 
         print( characters[name] )
 
@@ -46,6 +46,36 @@ class RollResult:
         if isinstance(other, RollResult):
             return RollResult(self.res + other.res, self.roll + ", " + other.roll)
         return RollResult(self.res + other, self.roll)
+
+    def __gt__(self, other):
+        if isinstance(other, RollResult):
+            return self.res > other.res
+        return self.res > other
+ 
+    def __lt__(self, other):
+        if isinstance(other, RollResult):
+            return self.res < other.res
+        return self.res < other
+
+    def __ge__(self, other):
+        if isinstance(other, RollResult):
+            return self.res >= other.res
+        return self.res >= other
+
+    def __le__(self, other):
+        if isinstance(other, RollResult):
+            return self.res <= other.res
+        return self.res <= other
+
+    def __mul__(self, other):
+        if isinstance(other, RollResult):
+            return RollResult(self.res * other.res, self.roll + other.roll)
+        return RollResult(self.res * other, self.roll)
+
+    def __div__(self, other):
+        if isinstance(other, RollResult):
+            return RollResult(self.res / other.res, self.roll + other.roll)
+        return RollResult(self.res / other, self.roll)
 
     def __str__(self):
         return "{}: {{{}}}".format(self.res, self.roll)

@@ -22,6 +22,9 @@ class DieBot(discord.Client):
         if message.author == self.user:
             return
 
+        if not message.content:
+            return
+
         if message.content == '?ping':
             return await message.channel.send('pong')
 
