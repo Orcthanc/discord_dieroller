@@ -30,7 +30,7 @@ class DieBot(discord.Client):
 
         if message.content[0] != '?':
             return
-        
+
         result = "Error"
 
         async with self.lock:

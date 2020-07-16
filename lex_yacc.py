@@ -19,9 +19,9 @@ def loadFromJSON(name):
 
         characters[name]["name"] = json["basic_info"]["Character_Name"]
 
-        characters[name]["fortitude"] = json["classes"]["Fort_Total"]
-        characters[name]["reflex"] = json["classes"]["Ref_Total"]
-        characters[name]["will"] = json["classes"]["Will_Total"]
+        characters[name]["fortitude"] = json["savingthrows"]["Fort"]["Total"]
+        characters[name]["reflex"] = json["savingthrows"]["Ref"]["Total"]
+        characters[name]["will"] = json["savingthrows"]["Will"]["Total"]
 
         characters[name]["initiative"] = json["stats"]["init"]["total"]
 
@@ -210,7 +210,10 @@ class Mul(Binop):
 
 class Div(Binop):
     def execute(self):
-        return self.left.execute() / self.right.execute()
+        right = self.right.execute()
+        if right.res == 0:
+            raise SyntaxError("Cannot divide by zero")
+        return self.left.execute() / right
 
 class UnMinus(Math_Element):
     def __init__(self, value):
@@ -400,7 +403,7 @@ def p_dminit_expression2(p):
     'expression : DMINIT LBRACK arglist RBRACK'
     results = [(x["name"], randrange(1, 21, 1) + int(x["initiative"])) for x in characters.values()]
     for x in range(1, len(p[3]) + 1):
-        results.append(("Enemy {}".format(x), randrange(1, 21, 1) + p[3][x-1]))
+        results.append(("Enemy {}".format(x), randrange(1, 21, 1) + p[3][x-1].execute().res))
     results.sort(key = lambda x: x[1], reverse = True)
     p[0] = "```\n"
     for x in results:
